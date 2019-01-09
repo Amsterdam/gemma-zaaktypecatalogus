@@ -11,7 +11,7 @@ class CatalogusSerializer(serializers.HyperlinkedModelSerializer):
         source='zaaktype_set',
         view_name='zaaktype-detail',
         lookup_field='uuid',
-        parent_lookup_kwargs={'catalogus_uuid': 'maakt_deel_uit_van__uuid'},
+        parent_lookup_kwargs={'catalogus_uuid': 'catalogus__uuid'},
     )
 
     besluittypen = NestedHyperlinkedRelatedField(
@@ -19,6 +19,15 @@ class CatalogusSerializer(serializers.HyperlinkedModelSerializer):
         read_only=True,
         source='besluittype_set',
         view_name='besluittype-detail',
+        lookup_field='uuid',
+        parent_lookup_kwargs={'catalogus_uuid': 'catalogus__uuid'}
+    )
+
+    informatieobjecttypen = NestedHyperlinkedRelatedField(
+        many=True,
+        read_only=True,
+        source='informatieobjecttype_set',
+        view_name='informatieobjecttype-detail',
         lookup_field='uuid',
         parent_lookup_kwargs={'catalogus_uuid': 'catalogus__uuid'}
     )
@@ -34,6 +43,7 @@ class CatalogusSerializer(serializers.HyperlinkedModelSerializer):
             'contactpersoon_beheer_emailadres',
             'zaaktypen',
             'besluittypen',
+            'informatieobjecttypen',
         )
         extra_kwargs = {
             'url': {
